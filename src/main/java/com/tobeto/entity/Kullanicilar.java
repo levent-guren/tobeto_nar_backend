@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,10 +38,10 @@ public class Kullanicilar implements Serializable {
 	private String sifre;
 
 	// bi-directional many-to-many association to Roller
-	@ManyToMany(mappedBy = "kullanicilars", cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "kullanicilars")
 	private List<Roller> rollers;
 
-	@OneToMany
+	@OneToMany(mappedBy = "kullanicilar")
 	private List<YazilimIlan> yazilimIlans;
 
 }

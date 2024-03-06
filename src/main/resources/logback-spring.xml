@@ -13,10 +13,12 @@
 	</appender>
 
 	<!-- LOG everything at INFO level -->
-	<root level="fatal">
+	<!-- 
+	<root level="debug">
 		<appender-ref ref="Console" />
 	</root>
-
+	-->						
+ 
 	<logger name="com.tobeto" level="trace" additivity="false">
 		<appender-ref ref="Console" />
 	</logger>

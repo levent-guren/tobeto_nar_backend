@@ -51,21 +51,22 @@ public class KullaniciService {
 		return false;
 	}
 
+	@Transactional
 	public Kullanicilar kayitOl(String email, String password) {
 		if (kullanicilarRepository.findByKullaniciAdi(email).isPresent()) {
 			// yeni kayıt işleminde var olan bir kayıdın email'i verilmiş.
 			// Hata döndürelim.
 			throw new RuntimeException("Bu isimde bir kullanıcı var");
 		}
-		Kullanicilar kullanicilar = new Kullanicilar();
+		final Kullanicilar kullanicilar = new Kullanicilar();
 		kullanicilar.setKullaniciAdi(email);
 		List<Roller> roller = rollerRepository.findAll();
 		roller = roller.stream().filter(r -> !r.getRol().equals("admin")).toList();
+		// ManytoMany ilişki olduğu için java sınıflarında da iki yönlü ilişki
+		// oluşturmak gerekiyor.
 		kullanicilar.setRollers(roller);
-		System.out.println(roller.size());
+		roller.forEach(r -> r.getKullanicilars().add(kullanicilar));
 		kullanicilar.setSifre(passwordEncoder.encode(password));
-		kullanicilar = kullanicilarRepository.save(kullanicilar);
-
-		return kullanicilar;
+		return kullanicilarRepository.save(kullanicilar);
 	}
 }
