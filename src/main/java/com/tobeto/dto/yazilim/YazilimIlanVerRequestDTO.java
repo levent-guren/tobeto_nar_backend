@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class YazilimIlanVerRequestDTO {
+	private String kullanicilarId;
 	private String isim;
 	private String soyisim;
 	private short yazilimDili;

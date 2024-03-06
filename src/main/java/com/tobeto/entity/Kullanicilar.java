@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +12,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * The persistent class for the kullanicilar database table.
@@ -18,6 +23,9 @@ import jakarta.persistence.NamedQuery;
  */
 @Entity
 @NamedQuery(name = "Kullanicilar.findAll", query = "SELECT k FROM Kullanicilar k")
+@Data
+@ToString(exclude = { "rollers", "yazilimIlans" })
+@EqualsAndHashCode(exclude = { "rollers", "yazilimIlans" })
 public class Kullanicilar implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -31,42 +39,10 @@ public class Kullanicilar implements Serializable {
 	private String sifre;
 
 	// bi-directional many-to-many association to Roller
-	@ManyToMany(mappedBy = "kullanicilars")
+	@ManyToMany(mappedBy = "kullanicilars", cascade = CascadeType.ALL)
 	private List<Roller> rollers;
 
-	public Kullanicilar() {
-	}
-
-	public UUID getId() {
-		return this.id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
-
-	public String getKullaniciAdi() {
-		return this.kullaniciAdi;
-	}
-
-	public void setKullaniciAdi(String kullaniciAdi) {
-		this.kullaniciAdi = kullaniciAdi;
-	}
-
-	public String getSifre() {
-		return this.sifre;
-	}
-
-	public void setSifre(String sifre) {
-		this.sifre = sifre;
-	}
-
-	public List<Roller> getRollers() {
-		return this.rollers;
-	}
-
-	public void setRollers(List<Roller> rollers) {
-		this.rollers = rollers;
-	}
+	@OneToMany
+	private List<YazilimIlan> yazilimIlans;
 
 }

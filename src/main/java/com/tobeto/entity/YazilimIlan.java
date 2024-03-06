@@ -9,8 +9,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * The persistent class for the yazilim_ilan database table.
@@ -19,6 +24,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "yazilim_ilan")
 @NamedQuery(name = "YazilimIlan.findAll", query = "SELECT y FROM YazilimIlan y")
+@Data
+@ToString(exclude = "kullanicilar")
+@EqualsAndHashCode(exclude = "kullanicilar")
 public class YazilimIlan implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -40,63 +48,8 @@ public class YazilimIlan implements Serializable {
 	@Column(name = "yazilim_dili")
 	private short yazilimDili;
 
-	public YazilimIlan() {
-	}
-
-	public UUID getId() {
-		return this.id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
-
-	public String getIsTanimi() {
-		return this.isTanimi;
-	}
-
-	public void setIsTanimi(String isTanimi) {
-		this.isTanimi = isTanimi;
-	}
-
-	public String getIsim() {
-		return this.isim;
-	}
-
-	public void setIsim(String isim) {
-		this.isim = isim;
-	}
-
-	public String getSoyisim() {
-		return this.soyisim;
-	}
-
-	public void setSoyisim(String soyisim) {
-		this.soyisim = soyisim;
-	}
-
-	public String getSure() {
-		return this.sure;
-	}
-
-	public void setSure(String sure) {
-		this.sure = sure;
-	}
-
-	public BigDecimal getUcret() {
-		return this.ucret;
-	}
-
-	public void setUcret(BigDecimal ucret) {
-		this.ucret = ucret;
-	}
-
-	public short getYazilimDili() {
-		return this.yazilimDili;
-	}
-
-	public void setYazilimDili(short yazilimDili) {
-		this.yazilimDili = yazilimDili;
-	}
+	@ManyToOne
+	@JoinColumn(name = "kullanici_id")
+	private Kullanicilar kullanicilar;
 
 }

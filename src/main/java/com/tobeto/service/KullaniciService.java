@@ -1,5 +1,6 @@
 package com.tobeto.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,14 +8,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tobeto.entity.Kullanicilar;
-import com.tobeto.repository.KullanicilarRepository;
+import com.tobeto.entity.Roller;
+import com.tobeto.repository.KullaniciRepository;
+import com.tobeto.repository.RollerRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class KullaniciService {
 	@Autowired
-	private KullanicilarRepository kullanicilarRepository;
+	private KullaniciRepository kullanicilarRepository;
+	@Autowired
+	private RollerRepository rollerRepository;
+	// @Autowired
+	// private Kullanici
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -41,5 +49,23 @@ public class KullaniciService {
 			}
 		}
 		return false;
+	}
+
+	public Kullanicilar kayitOl(String email, String password) {
+		if (kullanicilarRepository.findByKullaniciAdi(email).isPresent()) {
+			// yeni kayıt işleminde var olan bir kayıdın email'i verilmiş.
+			// Hata döndürelim.
+			throw new RuntimeException("Bu isimde bir kullanıcı var");
+		}
+		Kullanicilar kullanicilar = new Kullanicilar();
+		kullanicilar.setKullaniciAdi(email);
+		List<Roller> roller = rollerRepository.findAll();
+		roller = roller.stream().filter(r -> !r.getRol().equals("admin")).toList();
+		kullanicilar.setRollers(roller);
+		System.out.println(roller.size());
+		kullanicilar.setSifre(passwordEncoder.encode(password));
+		kullanicilar = kullanicilarRepository.save(kullanicilar);
+
+		return kullanicilar;
 	}
 }

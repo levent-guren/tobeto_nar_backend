@@ -40,10 +40,10 @@ public class TokenService {
 		// add custom keys
 		Map<String, Object> customKeys = new HashMap<>();
 		customKeys.put("roller", roller);
+		customKeys.put("kullanicilarId", kullanicilar.getId().toString());
 		builder = builder.claims(customKeys);
 
-//		Instant tarih = Instant.now().plus(15, ChronoUnit.MINUTES);
-		Instant tarih = Instant.now().plus(1, ChronoUnit.SECONDS);
+		Instant tarih = Instant.now().plus(15, ChronoUnit.MINUTES);
 
 		builder = builder.subject("login").id(kullanicilar.getKullaniciAdi()).issuedAt(new Date())
 				.expiration(Date.from(tarih));
